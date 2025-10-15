@@ -1,0 +1,9 @@
+service macrostock_wifi_approve /system/bin/sh system_ext/bin/macrostock_wifi_approve.sh
+    class late_start
+    user root
+    group root shell
+    oneshot
+
+# run once, after user 0 CE storage is available
+on property:sys.user.0.ce_available=1 && property:persist.sys.macrostock_wifi_sugg_approved!=1
+    start macrostock_wifi_approve

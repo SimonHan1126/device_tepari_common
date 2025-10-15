@@ -1,0 +1,5 @@
+<config>
+    <update-ownership
+        package="com.tepari.macrostock.macrostock"
+        installer="com.tepari.macrostock.macrostock_starter"/>
+</config>
