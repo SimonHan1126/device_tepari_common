@@ -1,0 +1,18 @@
+# Per-unit network hostname, read by TeamViewer Host as the default device name.
+#
+# Provisioning writes the customer name once, and it persists across reboots:
+#     setprop persist.sys.tepari_device_name "<customer name>"
+#
+# The '=*' trigger fires when the property is written at runtime, and again on
+# every boot: init replays persistent properties through the normal property
+# path once /data is mounted, which re-runs property triggers. init only fires
+# a '=*' trigger for a non-empty value, so an unprovisioned unit simply leaves
+# net.hostname unset, exactly as it is today.
+#
+# This must be installed to system_ext (or system/product), never to vendor or
+# odm. setprop from a vendor/odm init script runs in the vendor_init SELinux
+# domain, which is not granted set_prop for system_prop -- the context of both
+# net.hostname and persist.sys.* . system_ext runs in the init domain.
+
+on property:persist.sys.tepari_device_name=*
+    setprop net.hostname ${persist.sys.tepari_device_name}
